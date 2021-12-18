@@ -1,10 +1,23 @@
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from './three.js-master/examples/jsm/loaders/GLTFLoader.js'
+// import { FontLoader } from './three.js-master/src/loaders/FontLoader.js'
+// import { TextGeometry } from './three.js-master/src/geometries/TextGeometry.js'
 
 let scene, camera, renderer;
 
-const textureLoader = new THREE.TextureLoader();
+let onPointerDownPointerX,
+  onPointerDownPointerY,
+  onPointerDownLon,
+  onPointerDownLat;
 
+let lon = 0,
+  lat = 0;
+let phi = 0,
+  theta = 0;
+
+
+//textures
+const textureLoader = new THREE.TextureLoader();
 textureLoader.load("model/1.jpg", function (texture) {
   texture.encoding = THREE.sRGBEncoding;
   texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -69,6 +82,10 @@ function init(texture) {
         }
     )
 
+
+
+
+
     //Resize
     window.addEventListener('resize', onWindowResize, false)
     
@@ -79,10 +96,75 @@ function init(texture) {
         renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
+
+
+
+    // крутим вертим
+function onPointerDown(event) {
+    event.preventDefault();
+  
+    onPointerDownPointerX = event.clientX;
+    onPointerDownPointerY = event.clientY;
+  
+    onPointerDownLon = lon;
+    onPointerDownLat = lat;
+  
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointerup", onPointerUp);
+  }
+  
+  function onPointerMove(event) {
+    lon = (event.clientX - onPointerDownPointerX) * 0.1 + onPointerDownLon;
+    lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
+  }
+  
+  function onPointerUp() {
+    document.removeEventListener("pointermove", onPointerMove);
+    document.removeEventListener("pointerup", onPointerUp);
+  }
+  
+  function onDocumentMouseWheel(event) {
+    const fov = camera.fov + event.deltaY * 0.05;
+  
+    camera.fov = THREE.MathUtils.clamp(fov, 10, 75);
+  
+    camera.updateProjectionMatrix();
+  }
+
+
+
     function animate() {
         requestAnimationFrame(animate)
         controls.update();
-        renderer.render(scene, camera)
+        // renderer.render(scene, camera)
+        render();
     }
     animate()
 }
+
+function render() {
+    const time = Date.now();
+  
+    lon += 0.15;
+  
+    lat = Math.max(-85, Math.min(85, lat));
+    phi = THREE.MathUtils.degToRad(90 - lat);
+    theta = THREE.MathUtils.degToRad(lon);
+  
+    scene.position.x = Math.cos(time * 0.001) * 1;
+    scene.position.y = Math.sin(time * 0.001) * 1;
+    scene.position.z = Math.sin(time * 0.001) * 1;
+  
+    scene.rotation.x += 0.002;
+    scene.rotation.y += 0.003;
+  
+    camera.position.x = 1000 * Math.sin(phi) * Math.cos(theta);
+    camera.position.y = 1000 * Math.cos(phi);
+    camera.position.z = 1000 * Math.sin(phi) * Math.sin(theta);
+  
+    camera.lookAt(scene.position);
+  
+
+  
+    renderer.render(scene, camera);
+  }
