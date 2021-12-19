@@ -5,15 +5,10 @@ import { TextGeometry } from './three.js-master/src/geometries/TextGeometry.js'
 
 let scene, camera, renderer;
 
-let onPointerDownPointerX,
-  onPointerDownPointerY,
-  onPointerDownLon,
-  onPointerDownLat;
+let onPointerDownPointerX, onPointerDownPointerY, onPointerDownLon, onPointerDownLat;
 
-let lon = 0,
-  lat = 0;
-let phi = 0,
-  theta = 0;
+let lon = 0, lat = 0;
+let phi = 0, theta = 0;
 
 
 //textures
