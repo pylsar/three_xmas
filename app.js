@@ -29,7 +29,6 @@ function init(texture) {
     let container = document.querySelector('.container');
 
 
-
     //Scene
     scene = new THREE.Scene()
     scene.background = texture;
@@ -83,9 +82,6 @@ function init(texture) {
     )
 
 
-
-
-
     //3D text
     const loaderFont = new THREE.FontLoader();
     let geometry;
@@ -135,9 +131,7 @@ function init(texture) {
     }
 
 
-
-
-    // keyboard mouse
+    // keyboard move
     function onPointerDown(event) {
         event.preventDefault();
       
@@ -149,17 +143,17 @@ function init(texture) {
       
         document.addEventListener("pointermove", onPointerMove);
         document.addEventListener("pointerup", onPointerUp);
-      }
+    }
       
       function onPointerMove(event) {
         lon = (event.clientX - onPointerDownPointerX) * 0.1 + onPointerDownLon;
         lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
-      }
+    }
       
       function onPointerUp() {
         document.removeEventListener("pointermove", onPointerMove);
         document.removeEventListener("pointerup", onPointerUp);
-      }
+    }
       
       function onDocumentMouseWheel(event) {
         const fov = camera.fov + event.deltaY * 0.05;
@@ -167,8 +161,7 @@ function init(texture) {
         camera.fov = THREE.MathUtils.clamp(fov, 10, 75);
       
         camera.updateProjectionMatrix();
-      }
-
+    }
 
 
     function animate() {
@@ -177,7 +170,7 @@ function init(texture) {
         // renderer.render(scene, camera)
         render();
     }
-    animate()
+    animate();
 }
 
 function render() {
@@ -206,13 +199,8 @@ function render() {
 }
 
 
-
-
-
+// count time
 const text = document.querySelector('.time');
-const stop = document.querySelector('.stop');
-const calc = document.querySelector('.calc');
-const rome = document.querySelector('.rome');
 
 let myInt = setInterval(()=>{
     let now = new Date();
@@ -220,11 +208,9 @@ let myInt = setInterval(()=>{
     let result = newyear.getTime() - now.getTime();
     text.innerText = result;
 
-     // оставляем нули при уменьшении числа
+     // add nulls to make number more then 10 letters
   if(result < 1){
     text.innerText = "000000000";
-    document.body.style.backgroundImage = "url('https://vgif.ru/gifs/145/vgif-ru-19231.gif')";
-    text.classList.add("blinkanim");
     }else if(result < 10){
         text.innerText = "00000000" + result;
     }else if(result < 100){
@@ -242,11 +228,9 @@ let myInt = setInterval(()=>{
     }else if(result < 100000000){
         text.innerText = "000" + result;
     }
-
-
 }, 1);
 
- 
+//stop counting 
 text.addEventListener("click", function(){
     clearInterval(myInt);
     let today = new Date();
