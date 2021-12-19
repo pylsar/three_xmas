@@ -89,17 +89,18 @@ function init(texture) {
     //3D text
     const loaderFont = new THREE.FontLoader();
     let geometry;
+
     loaderFont.load( 'fonts/helvetiker_bold.typeface.json', 
         //Create 3D text after loading the font
         function ( font ) {
-            geometry = new THREE.TextGeometry( '11111111111111111', {
+            geometry = new THREE.TextGeometry( 'HAPPY NEW YEAR SUNERZHA', {
                 font: font,
                 size: 80,
                 height: 5,
                 curveSegments: 12,
                 bevelEnabled: true,
-                bevelThickness: 10,
-                bevelSize: 8,
+                bevelThickness: 25,
+                bevelSize: 2,
                 bevelSegments: 5
             } );
             //Create normal vector material
@@ -109,7 +110,7 @@ function init(texture) {
                 opacity: 0.9
         });
             var mesh = new THREE.Mesh(geometry, meshMaterial);
-            mesh.position.set(-300, 0, 0);
+            mesh.position.set(-750, -600, 0);
             scene.add(mesh);
         },
         //Load progress
@@ -121,7 +122,6 @@ function init(texture) {
             console.log(err);
         }
      );
-
 
 
     //Resize
@@ -193,7 +193,7 @@ function render() {
   scene.position.y = Math.sin(time * 0.001) * 1;
   scene.position.z = Math.sin(time * 0.001) * 1;
 
-  scene.rotation.x += 0.002;
+  // scene.rotation.x += 0.002;
   scene.rotation.y += 0.003;
 
   camera.position.x = 2000 * Math.sin(phi) * Math.cos(theta);
@@ -202,7 +202,62 @@ function render() {
 
   camera.lookAt(scene.position);
 
-
-
   renderer.render(scene, camera);
 }
+
+
+
+
+
+const text = document.querySelector('.time');
+const stop = document.querySelector('.stop');
+const calc = document.querySelector('.calc');
+const rome = document.querySelector('.rome');
+
+let myInt = setInterval(()=>{
+    let now = new Date();
+    let newyear = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0, 0);
+    let result = newyear.getTime() - now.getTime();
+    text.innerText = result;
+
+     // оставляем нули при уменьшении числа
+  if(result < 1){
+    text.innerText = "000000000";
+    document.body.style.backgroundImage = "url('https://vgif.ru/gifs/145/vgif-ru-19231.gif')";
+    text.classList.add("blinkanim");
+    }else if(result < 10){
+        text.innerText = "00000000" + result;
+    }else if(result < 100){
+        text.innerText = "0000000" + result;
+    }else if(result < 1000){
+        text.innerText = "000000" + result;
+    }else if(result < 10000){
+        text.innerText = "00000" + result;
+    }else if(result < 100000){
+        text.innerText = "0000" + result;
+    }else if(result < 1000000){
+        text.innerText = "000" + result;
+    }else if(result < 10000000){
+        text.innerText = "00" + result;
+    }else if(result < 100000000){
+        text.innerText = "000" + result;
+    }
+
+
+}, 1);
+
+ 
+text.addEventListener("click", function(){
+    clearInterval(myInt);
+    let today = new Date();
+    let victorineDay = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0, 0);
+    let victorineResult = victorineDay.getTime() - today.getTime();
+  
+    text.innerText = victorineResult;
+});
+
+
+ 
+
+
+
